@@ -29,6 +29,7 @@ class App extends Component {
                     <Route path='/' exact  component={Profile} />
                     <Route path='/signup'  component={Signup} />
                     <Route path='/login' component={Login} />
+                    <Redirect from='*' to="/"  />
                 </Switch>
             </Router>
         )

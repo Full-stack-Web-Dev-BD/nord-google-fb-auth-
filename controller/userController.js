@@ -1,5 +1,5 @@
 const customValidator = require('../validator/customValidator')
-const userModel = require('../model/userModel')
+const User = require('../model/User')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const { sendMail } = require('../mailer')
@@ -10,7 +10,7 @@ const register = (req, res) => {
     if (!verify.isValid) {
         return res.status(400).json(verify.error)
     }
-    userModel.findOne({ email: req.body.email })
+    User.findOne({ email: req.body.email })
         .then(user => {
             if (user) {
                 return res.status(400).json({ massage: "User existing !!!" })
@@ -19,12 +19,12 @@ const register = (req, res) => {
                 if (err) {
                     return res.status(500).json({ massage: "Server error !!!" })
                 }
-                new userModel({
+                new User({
                     username: req.body.name,
                     email: req.body.email,
                     password: hash,
                     active: false,
-                    time_created: new Date()
+                    // time_created: new Date()
                 }).save()
                     .then(user => {
 
@@ -52,7 +52,7 @@ const login = (req, res) => {
     if (!verify.isValid) {
         return res.status(400).json(verify.err)
     }
-    userModel.findOne({ email: email })
+    User.findOne({ email: email })
         .then(user => {
             if (!user) {
                 return res.status(400).json({ massage: "User not founded !!" })
@@ -78,7 +78,7 @@ const login = (req, res) => {
         })
 }
 const getSingleUser = (req, res) => {
-    userModel.findById(req.params.id)
+    User.findById(req.params.id)
         .then(user => {
             if (!user) {
                 return res.status(400).json({ massage: "Bad request" })
@@ -90,7 +90,7 @@ const getSingleUser = (req, res) => {
         })
 }
 const socialLogin = (req, res) => {
-    userModel.findOne({ email: req.body.email })
+    User.findOne({ email: req.body.email })
         .then(user => {
             if (user) {
                 let token = jwt.sign({
@@ -100,12 +100,12 @@ const socialLogin = (req, res) => {
                 }, 'st_app', { expiresIn: '4h' })
                 return res.status(200).json({ token: token })
             }
-            new userModel({
+            new User({
                 username: req.body.name,
                 email: req.body.email,
                 password: '',
                 active: false,
-                time_created: new Date()
+                // time_created: new Date()
 
             }).save()
                 .then(user => {
@@ -134,7 +134,7 @@ const socialLogin = (req, res) => {
 const confirmation=(req, res)=>{
     let jwt=req.params.jwt
     let decoded=jwtDecode(jwt)
-    userModel.findOne({email:decoded.email})
+    User.findOne({email:decoded.email})
     .then(user=>{
         user.active=true
         user.save()

@@ -45,7 +45,7 @@ class Signup extends React.Component {
     e.preventDefault()
     let { name, email, password, confirmPassword } = this.state
     let obj = { name, email, password, confirmPassword }
-    Axios.post('http://localhost:5000/register', obj)
+    Axios.post('/register', obj)
       .then((res) => {
         // window.location.href = '/login'
         this.setState({
@@ -62,7 +62,7 @@ class Signup extends React.Component {
   responseGoogle = (res) => {
     console.log(res, ' from google')
     if (res.profileObj) {
-      Axios.post('http://localhost:5000/socialLogin', {
+      Axios.post('/socialLogin', {
         name: res.profileObj.name,
         email: res.profileObj.email
       })
@@ -80,7 +80,7 @@ class Signup extends React.Component {
   responseFacebook = (res) => {
     console.log(res, ' from facebook')
     if (res.name) {
-      Axios.post('http://localhost:5000/socialLogin', {
+      Axios.post('/socialLogin', {
         name: res.name,
         email: res.email
       })

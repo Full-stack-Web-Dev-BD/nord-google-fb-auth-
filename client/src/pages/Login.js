@@ -47,7 +47,7 @@ class Login extends React.Component {
   submitHandler = (e) => {
     e.preventDefault()
     let { email, password } = this.state
-    Axios.post('http://localhost:5000/login', { email, password })
+    Axios.post('/login', { email, password })
       .then(res => {
         window.localStorage.setItem('load-token', res.data.token)
         window.location.href = '/'
@@ -59,7 +59,7 @@ class Login extends React.Component {
       })
   }
   responseGoogle = (res) => {
-    Axios.post('/googleLogin', {
+    Axios.post('/socialLogin', {
       name: res.profileObj.name,
       email: res.profileObj.email
     })
@@ -74,7 +74,7 @@ class Login extends React.Component {
   }
   responseFacebook = (res) => {
     console.log(res, ' from facebook')
-    Axios.post('/googleLogin', {
+    Axios.post('/socialLogin', {
       name: res.name,
       email: res.email
     })
@@ -131,8 +131,9 @@ class Login extends React.Component {
                   </div>
                   <Button onClick={e => { this.submitHandler(e) }} color="info" size="sm" className="mt-3" ><span style={{ fontWeight: '300' }}>Login</span> </Button>
                   <p className="mt-3 text-center">Not have account ? <Link to='/signup'>Sign up now </Link> </p>
-                  {/* <div className="text-center">
+                  <div className="text-center">
                     <GoogleLogin
+                      style={{marginBottom:'30px'}}
                       clientId={GOOGLE_CLIENT_ID}
                       buttonText="Sign up with Google "
                       onSuccess={this.responseGoogle}
@@ -146,7 +147,7 @@ class Login extends React.Component {
                       fields="name,email,picture"
                       onClick={() => { console.log('clicked') }}
                       callback={this.responseFacebook} />
-                  </div> */}
+                  </div>
                 </CardBody>
               </Card>
             </Col>
